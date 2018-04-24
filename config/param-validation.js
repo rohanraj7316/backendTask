@@ -16,5 +16,10 @@ module.exports = {
             imageurl: Joi.string().required(),
             token: Joi.string().required()
         }
+    },
+    patchJson: {
+        body: {
+            token: Joi.string().required()
+        }
     }
 };

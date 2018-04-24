@@ -1,8 +1,8 @@
 const httpStatus = require('http-status');
+const Jimp = require("jimp");
+const path = require('path');
 const APIError = require('./../helpers/APIError');
-const rq = require('request');
-const fs = require('fs');
-
+const logger = require('./../../config/logger');
 /**
  * @description - resizing image.
  * @param {Object} req - Request Object.
@@ -11,27 +11,24 @@ const fs = require('fs');
  * @return {Object} - Resize Image || Error.
  */
 function returnResizeImage (req, res, next) {
-    request(req.body.imageurl, (err, body, response) => {
-        if (err) {
-            return next (error);
-        } else {
-            if (body && response.statusCode === 200) {
-                /** check for dir exists or not. */
-                if (!fs.existsSync('images')) {
-                    fs.mkdirSync('images');
-                }
-                
+    Jimp.read(req.body.imageurl)
+        .then(imageData => {
+            let processImage = imageData
+                                .resize(50, 50)
+                                .quality(60)
+                                .write("lena-small-bw.jpg");
+            
+            if (processImage) {
+                return res.sendFile('/Users/rohanraj/Desktop/workspace/myproj/backendTask/lena-small-bw.jpg');
             } else {
-                if (!body) {
-                    /** image loading error. */
-                    return next ();
-                } else {
-                    /** other type of error. */
-                    return next ();
-                }
+                return res.json({
+                    statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+                    error: 'Not able to process image'
+                });
             }
-        }
-    });
+        }).catch(error => {
+            return next (error);
+        });
 }
 
 module.exports = {

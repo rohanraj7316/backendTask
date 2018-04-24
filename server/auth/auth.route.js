@@ -7,7 +7,7 @@ const config = require('../../config/config');
 
 const router = express.Router(); 
 
-/** POST /api/auth/login - Returns token if correct username and password is provided */
+/** POST /api/login - Returns token if correct username and password is provided */
 router.route('/login')
   .post(validate(paramValidation.login), authCtrl.login);
 
