@@ -13,19 +13,19 @@ mongoose.Promise = require('bluebird');
 /**
  * @description - connect to the MongoDB.
  */
-const mongoUri = config.mongo.host;
-mongoose.connect (mongoUri);
+// const mongoUri = config.mongo.host;
+// mongoose.connect (mongoUri);
 
-/**
- * @description - will be get triggered when there is any connection error.
- */
-mongoose.connection.on('error', (error) => {
-    /**
-     * @description - this statement has been added to stop the server.
-     */
-    logger.error(`Error in MongoDB connection ${mongoUri}: ${error}`);
-    throw new Error (`unable to connect to MongoDB ${mongoUri}`);
-});
+// /**
+//  * @description - will be get triggered when there is any connection error.
+//  */
+// mongoose.connection.on('error', (error) => {
+//     /**
+//      * @description - this statement has been added to stop the server.
+//      */
+//     logger.error(`Error in MongoDB connection ${mongoUri}: ${error}`);
+//     throw new Error (`unable to connect to MongoDB ${mongoUri}`);
+// });
 
 app.listen (config.port, () => {
     logger.info (`Server has been started on port ${config.port}`);
