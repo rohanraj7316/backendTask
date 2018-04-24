@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 const httpStatus = require('http-status');
+
 const APIError = require('../helpers/APIError');
 const config = require('../../config/config');
-
+const logger = require('./../../config/logger')(module);
 
 
     /**
@@ -26,6 +27,7 @@ function login(req, res, next) {
         });
     }
     const error = new APIError(`Authentication error`, httpStatus.UNAUTHORIZED, true);
+    logger.error(error);
     return next (error);
 }
 

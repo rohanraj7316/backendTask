@@ -18,17 +18,20 @@ function patchExample(req, res, next) {
                 body: DummyJSON
             });
         } else {
+            const error = (function() {
+                if (!Array.isArray(req.body.body)) {
+                    return 'INVALID TYPE';
+                } else if (req.body.body.length === 0){
+                    return 'EMPTY ARRAY';
+                }
+            })();
+            logger.error(error);
             return res.status(httpStatus.BAD_REQUEST).json({
-                error: (function() {
-                    if (!Array.isArray(req.body.body)) {
-                        return 'INVALID TYPE';
-                    } else if (req.body.body.length === 0){
-                        return 'EMPTY ARRAY';
-                    }
-                })()
+                error
             });
         }
     } catch (Exception) {
+        logger.error(Exception);
         return next (Exception);
     }
 }

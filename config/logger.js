@@ -2,22 +2,27 @@
 const winston = require('winston');
 const fs = require('fs');
 
+
 const env = process.env.NODE_ENV || 'development';
 const logDir = 'logs';
 
-/* create a log directory if it does not exists **/
+// create a log directory if it does not exists
 if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir);
 }
 
-/**
- * @description - add logger.
- * @example - logger.error || logger.warn || logger.info || logger.debugg.
- */
-const logger = new (winston.Logger)({
+
+module.exports = function(callingModule) {
+  var getLabel = function() {
+    var parts = callingModule.filename.split('/');
+    return parts[parts.length - 2] + '/' + parts.pop();
+  };
+  return new winston.Logger({
     transports: [
         new (winston.transports.Console)({
             colorize: true,
+            level: 'debug',
+            label: getLabel(),
             timestamp: function() {
                 return new Date().toISOString();
             }
@@ -56,5 +61,4 @@ const logger = new (winston.Logger)({
         })
     ]
 }); 
-
-module.exports = logger;
+}

@@ -1,8 +1,10 @@
 const httpStatus = require('http-status');
 const Jimp = require("jimp");
 const path = require('path');
+
 const APIError = require('./../helpers/APIError');
-const logger = require('./../../config/logger');
+const logger = require('./../../config/logger')(module);
+
 /**
  * @description - resizing image.
  * @param {Object} req - Request Object.
@@ -21,12 +23,17 @@ function returnResizeImage (req, res, next) {
             if (processImage) {
                 return res.sendFile('/Users/rohanraj/Desktop/workspace/myproj/backendTask/lena-small-bw.jpg');
             } else {
+                logger.error({
+                    statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+                    error: 'Not able to process image'
+                });
                 return res.json({
                     statusCode: httpStatus.INTERNAL_SERVER_ERROR,
                     error: 'Not able to process image'
                 });
             }
         }).catch(error => {
+            logger.error(error);
             return next (error);
         });
 }

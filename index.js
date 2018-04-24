@@ -3,7 +3,7 @@ const util  = require('util');
 
 const config = require('./config/config');
 const app = require('./config/express');
-const logger = require('./config/logger');
+const logger = require('./config/logger')(module);
 
 /**
  * @description - bluebird is added as mongoose file main promise.
